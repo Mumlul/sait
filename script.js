@@ -168,6 +168,7 @@ async function saveResults(name, personality, time) {
     // });
     try {
     const response = await fetch(SCRIPT_URL, {
+      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
