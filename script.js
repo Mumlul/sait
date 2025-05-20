@@ -1,5 +1,5 @@
 // Конфигурация
-const SCRIPT_URL = "ВАШ_URL_СКРИПТА_APPS_SCRIPT";
+const SCRIPT_URL = "https://script.google.com/u/3/home/projects/1W1kl7tutVuZpIvRvXhViZ1GnMTBcSO7vhoBdObmLkxERcukwTcJXn7Tb/edit";
 
 // Вопросы теста
 const questions = [
