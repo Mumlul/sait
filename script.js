@@ -154,43 +154,18 @@ function restartQuiz() {
 // Сохранение результатов через Apps Script
 async function saveResults(name, personality, time) {
   try {
-    // const params = new URLSearchParams();
-    // params.append('name', name);
-    // params.append('personality', personality);
-    // params.append('time', time);
-    
-    // const response = await fetch(`${SCRIPT_URL}?${params}`, {
-    //   method: 'POST',
-    //   redirect: 'follow',
-    //   headers: {
-    //     'Content-Type': 'text/plain;charset=utf-8',
-    //   }
-    // });
+    const params = new URLSearchParams();
+    params.append('name', name);
+    params.append('personality', personality);
+    params.append('time', time);
     console.log("Отправляемые данные:", {name, personality, time});
-    try {
-    const response = await fetch(SCRIPT_URL, {
-      mode: 'no-cors',
+    const response = await fetch(`${SCRIPT_URL}?${params}`, {
       method: 'POST',
+      redirect: 'follow',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `name=${encodeURIComponent(name)}&personality=${encodeURIComponent(personality)}&time=${time}`
+        'Content-Type': 'text/plain;charset=utf-8',
+      }
     });
-    console.log(await response.text());
-  } catch (error) {
-    console.error('Ошибка:', error);
-  }
-    
-    // Вариант 2: Если нужно отправить JSON
-    
-    // const response = await fetch(SCRIPT_URL, {
-    //   method: 'POST',
-    //   body: JSON.stringify({name, personality, time}),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   }
-    // });
-    
     
     const result = await response.text();
     console.log('Сервер ответил:', result);
