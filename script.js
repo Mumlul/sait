@@ -153,21 +153,36 @@ function restartQuiz() {
 
 // Сохранение результатов через Apps Script
 async function saveResults(name, personality, time) {
-    try {
+  try {
+    // Вариант 1: Отправка через параметры URL (лучше работает с CORS)
+    const params = new URLSearchParams();
+    params.append('name', name);
+    params.append('personality', personality);
+    params.append('time', time);
+    
+    const response = await fetch(`${SCRIPT_URL}?${params}`, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      }
+    });
+    
+    // Вариант 2: Если нужно отправить JSON
+    /*
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors', 
+      body: JSON.stringify({name, personality, time}),
       headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name,
-        personality: personality,
-        time: time
-      })
+        'Content-Type': 'application/json',
+      }
     });
-    console.log("Данные отправлены");
+    */
+    
+    const result = await response.text();
+    console.log('Сервер ответил:', result);
+    
   } catch (error) {
-    console.error("Ошибка при сохранении:", error);
+    console.error('Ошибка:', error);
   }
 }
