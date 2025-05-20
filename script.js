@@ -1,5 +1,5 @@
 // Конфигурация
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMVh6H4dc_RQhq7-NssgPeTI4KeOxU2ZyKvnd9tFfKpBrWkGBemG90JeYe3uO-oRyoYw/exec";
+// const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMVh6H4dc_RQhq7-NssgPeTI4KeOxU2ZyKvnd9tFfKpBrWkGBemG90JeYe3uO-oRyoYw/exec";
 
 // Вопросы теста
 const questions = [
@@ -153,24 +153,30 @@ function restartQuiz() {
 
 // Сохранение результатов через Apps Script
 async function saveResults(name, personality, time) {
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMVh6H4dc_RQhq7-NssgPeTI4KeOxU2ZyKvnd9tFfKpBrWkGBemG90JeYe3uO-oRyoYw/exec";
+
+  
   try {
-    const params = new URLSearchParams();
-    params.append('name', name);
-    params.append('personality', personality);
-    params.append('time', time);
-    console.log("Отправляемые данные:", {name, personality, time});
-    const response = await fetch(`${SCRIPT_URL}?${params}`, {
+    // Вариант 1: Отправка простым текстом (лучше работает)
+    const response = await fetch(SCRIPT_URL, {
       method: 'POST',
-      redirect: 'follow',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      }
+      headers: {'Content-Type': 'text/plain'},
+      body: `name=${name}&personality=${personality}&time=${time}`
     });
     
+    // Вариант 2: Отправка JSON (если нужно)
+    /*
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, personality, time})
+    });
+    */
+    
     const result = await response.text();
-    console.log('Сервер ответил:', result);
+    console.log("Ответ сервера:", result);
     
   } catch (error) {
-    console.error('Ошибка:', error);
+    console.error("Ошибка запроса:", error);
   }
 }
