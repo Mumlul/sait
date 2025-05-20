@@ -175,6 +175,7 @@ const nextButton = document.getElementById('next-btn');
 const startButton = document.getElementById('start-btn');
 const restartButton = document.getElementById('restart-btn');
 const userNameInput = document.getElementById('user-name');
+const userGroupeInput = document.getElementById('user-groupe');
 const resultName = document.getElementById('result-name');
 const resultPersonality = document.getElementById('result-personality');
 const timeSpentElement = document.getElementById('time-spent');
@@ -185,6 +186,7 @@ let totalScore = 0;
 let startTime;
 let timerInterval;
 let userName = "";
+let userGroupe="";
 
 // Инициализация
 startButton.addEventListener('click', startQuiz);
@@ -194,6 +196,7 @@ restartButton.addEventListener('click', restartQuiz);
 // Запуск теста
 function startQuiz() {
     userName = userNameInput.value.trim() || "Аноним";
+    userGroupe=userGroupeInput.value.trim() || "Неизвестно";
     nameForm.style.display = 'none';
     quizContainer.style.display = 'block';
     
@@ -253,7 +256,7 @@ async function finishQuiz() {
     timeSpentElement.textContent = timeSpent;
     
     // Отправка результатов
-    await saveResults(userName, personalityType, timeSpent);
+    await saveResults(userName, personalityType, timeSpent, userGroupe);
 }
 
 // Определение типа личности
@@ -288,8 +291,8 @@ function restartQuiz() {
 }
 
 // Сохранение результатов через Apps Script
-async function saveResults(name, personality, time) {
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOjj5P7nvOsSmhfwapyipgXdiCpmBmKVvz3qKaBpanBQ8HugobXKCO4IwmtvQtM3geQw/exec";
+async function saveResults(name, personality, time, groupe) {
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBw24-3i5FjnbPrpizjtU-RXwlbDIzAwwQAoKFAentB6mdLxA5CLXu5lOPCqNMH5Nc5g/exec";
   
   try {
     // Вариант 1: Через параметры URL (рекомендуется)
@@ -297,6 +300,7 @@ async function saveResults(name, personality, time) {
     url.searchParams.append('name', name);
     url.searchParams.append('personality', personality);
     url.searchParams.append('time', time);
+    url.searchParams.append('group',groupe);
     
     const response = await fetch(url, {
       method: 'POST',
