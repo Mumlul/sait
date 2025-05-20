@@ -291,7 +291,7 @@ function restartQuiz() {
 }
 
 // Сохранение результатов через Apps Script
-async function saveResults(name, personality, time, groupe) {
+async function saveResults(name, personality, time, group) {
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBw24-3i5FjnbPrpizjtU-RXwlbDIzAwwQAoKFAentB6mdLxA5CLXu5lOPCqNMH5Nc5g/exec";
   
   try {
@@ -300,7 +300,7 @@ async function saveResults(name, personality, time, groupe) {
     url.searchParams.append('name', name);
     url.searchParams.append('personality', personality);
     url.searchParams.append('time', time);
-    url.searchParams.append('group',groupe);
+    url.searchParams.append('group',group);
     
     const response = await fetch(url, {
       method: 'POST',
