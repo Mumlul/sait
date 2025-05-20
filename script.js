@@ -166,6 +166,7 @@ async function saveResults(name, personality, time) {
     //     'Content-Type': 'text/plain;charset=utf-8',
     //   }
     // });
+    console.log("Отправляемые данные:", {name, personality, time});
     try {
     const response = await fetch(SCRIPT_URL, {
       mode: 'no-cors',
