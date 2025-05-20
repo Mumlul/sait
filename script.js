@@ -154,18 +154,30 @@ function restartQuiz() {
 // Сохранение результатов через Apps Script
 async function saveResults(name, personality, time) {
   try {
-    const params = new URLSearchParams();
-    params.append('name', name);
-    params.append('personality', personality);
-    params.append('time', time);
+    // const params = new URLSearchParams();
+    // params.append('name', name);
+    // params.append('personality', personality);
+    // params.append('time', time);
     
-    const response = await fetch(`${SCRIPT_URL}?${params}`, {
+    // const response = await fetch(`${SCRIPT_URL}?${params}`, {
+    //   method: 'POST',
+    //   redirect: 'follow',
+    //   headers: {
+    //     'Content-Type': 'text/plain;charset=utf-8',
+    //   }
+    // });
+    try {
+    const response = await fetch(SCRIPT_URL, {
       method: 'POST',
-      redirect: 'follow',
       headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      }
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `name=${encodeURIComponent(name)}&personality=${encodeURIComponent(personality)}&time=${time}`
     });
+    console.log(await response.text());
+  } catch (error) {
+    console.error('Ошибка:', error);
+  }
     
     // Вариант 2: Если нужно отправить JSON
     
