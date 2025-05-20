@@ -155,21 +155,21 @@ function restartQuiz() {
 async function saveResults(name, personality, time) {
   try {
     // Вариант 1: Отправка через параметры URL (лучше работает с CORS)
-    const params = new URLSearchParams();
-    params.append('name', name);
-    params.append('personality', personality);
-    params.append('time', time);
+    // const params = new URLSearchParams();
+    // params.append('name', name);
+    // params.append('personality', personality);
+    // params.append('time', time);
     
-    const response = await fetch(`${SCRIPT_URL}?${params}`, {
-      method: 'POST',
-      redirect: 'follow',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      }
-    });
+    // const response = await fetch(`${SCRIPT_URL}?${params}`, {
+    //   method: 'POST',
+    //   redirect: 'follow',
+    //   headers: {
+    //     'Content-Type': 'text/plain;charset=utf-8',
+    //   }
+    // });
     
     // Вариант 2: Если нужно отправить JSON
-    /*
+    
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify({name, personality, time}),
@@ -177,7 +177,7 @@ async function saveResults(name, personality, time) {
         'Content-Type': 'application/json',
       }
     });
-    */
+    
     
     const result = await response.text();
     console.log('Сервер ответил:', result);
