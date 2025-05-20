@@ -154,21 +154,20 @@ function restartQuiz() {
 // Сохранение результатов через Apps Script
 async function saveResults(name, personality, time) {
     try {
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: name,
-                personality: personality,
-                time: time
-            })
-        });
-        
-        const result = await response.text();
-        console.log('Результат сохранения:', result);
-    } catch (error) {
-        console.error('Ошибка при сохранении:', error);
-    }
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        personality: personality,
+        time: time
+      })
+    });
+    console.log("Данные отправлены");
+  } catch (error) {
+    console.error("Ошибка при сохранении:", error);
+  }
 }
