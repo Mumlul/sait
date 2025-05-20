@@ -1,5 +1,5 @@
 // Конфигурация
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvNTQgZPrTvJTCIhN0ZcQR8ocR-DYx-nBC1efLBLjpN6n4wJ8wZ25eR01O_M6Vyj09Hg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMVh6H4dc_RQhq7-NssgPeTI4KeOxU2ZyKvnd9tFfKpBrWkGBemG90JeYe3uO-oRyoYw/exec";
 
 // Вопросы теста
 const questions = [
