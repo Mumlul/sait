@@ -292,7 +292,7 @@ function restartQuiz() {
 
 // Сохранение результатов через Apps Script
 async function saveResults(name, personality, time, group) {
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBw24-3i5FjnbPrpizjtU-RXwlbDIzAwwQAoKFAentB6mdLxA5CLXu5lOPCqNMH5Nc5g/exec";
+  const SCRIPT_URL = "https://quiz-server-zsji.onrender.com";
   
   try {
     // Вариант 1: Через параметры URL (рекомендуется)
