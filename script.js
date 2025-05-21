@@ -292,27 +292,31 @@ function restartQuiz() {
 
 // Сохранение результатов через Apps Script
 async function saveResults(name, personality, time, group) {
-  const SCRIPT_URL = "https://quiz-server-zsji.onrender.com/api/save ";
-  
+  const SERVER_URL = "https://quiz-server-zsji.onrender.com/api/save ";
+
   try {
-    // Вариант 1: Через параметры URL (рекомендуется)
-    const url = new URL(SCRIPT_URL);
-    url.searchParams.append('name', name);
-    url.searchParams.append('personality', personality);
-    url.searchParams.append('time', time);
-    url.searchParams.append('group',group);
-    
-    const response = await fetch(url, {
+    const response = await fetch(SERVER_URL, {
       method: 'POST',
-      redirect: 'follow',
       headers: {
-        'Content-Type': 'text/plain;charset=UTF-8'
-      }
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        personality: personality,
+        time: time,
+        group: group
+      })
     });
-    const result = await response.text();
-    console.log("Результат:", result);
-    
+
+    if (!response.ok) {
+      throw new Error(`Ошибка сети: ${response.status} ${response.statusText}`);
+    }
+
+    const result = await response.text(); // Можно использовать .json(), если сервер возвращает JSON
+    console.log("Данные успешно отправлены:", result);
+
   } catch (error) {
-    console.error("Ошибка:", error);
+    console.error("Ошибка при отправке данных:", error.message);
+    alert("Не удалось сохранить результаты. Проверьте подключение к интернету.");
   }
 }
