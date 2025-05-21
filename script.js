@@ -292,7 +292,7 @@ function restartQuiz() {
 
 // Сохранение результатов через Apps Script
 async function saveResults(name, personality, time, group) {
-  const SCRIPT_URL = "https://quiz-server-zsji.onrender.com";
+  const SCRIPT_URL = "https://quiz-server-zsji.onrender.com/api/save ";
   
   try {
     // Вариант 1: Через параметры URL (рекомендуется)
