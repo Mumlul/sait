@@ -329,10 +329,9 @@ const startButton = document.getElementById('start-btn');
 const restartButton = document.getElementById('restart-btn');
 const userNameInput = document.getElementById('user-name');
 const userGroupeInput = document.getElementById('user-groupe');
-const resultName = document.getElementById('result-name');
 const resultPersonality = document.getElementById('result-personality');
+const resultDescription = document.getElementById('result-description');
 const timeSpentElement = document.getElementById('time-spent');
-const resultScoresList = document.getElementById('result-scores');
 
 let questions = [];
 let currentQuestionIndex = 0;
@@ -374,30 +373,56 @@ function updateTimer() {
 function showQuestion() {
   resetState();
   const currentQuestion = questions[currentQuestionIndex];
-  questionElement.innerHTML = `<h3>Вопрос ${currentQuestionIndex + 1}/${questions.length}</h3>
-                               <p>${currentQuestion.question}</p>`;
-  currentQuestion.answers.forEach(answer => {
-    const button = document.createElement('button');
-    button.innerText = answer.text;
-    button.classList.add('answer-btn');
-    button.dataset.type = answer.type;
-    button.addEventListener('click', () => selectAnswer(button));
-    questionElement.appendChild(button);
+
+  // HTML с двумя кнопками
+  questionElement.innerHTML = `
+    <h3>Вопрос ${currentQuestionIndex + 1}/${questions.length}</h3>
+    <div class="professions">
+      <div class="profession-card">
+        <h4>${currentQuestion.A.profession}</h4>
+        <p class="short">${currentQuestion.A.short}</p>
+        <p class="full">${currentQuestion.A.full}</p>
+        <button class="more-btn">Подробнее</button>
+        <button class="select-btn" data-type="${currentQuestion.A.type}">Выбрать</button>
+      </div>
+      <div class="profession-card">
+        <h4>${currentQuestion.B.profession}</h4>
+        <p class="short">${currentQuestion.B.short}</p>
+        <p class="full">${currentQuestion.B.full}</p>
+        <button class="more-btn">Подробнее</button>
+        <button class="select-btn" data-type="${currentQuestion.B.type}">Выбрать</button>
+      </div>
+    </div>
+  `;
+
+  // Обработчики событий
+  document.querySelectorAll('.more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.profession-card');
+      const short = card.querySelector('.short');
+      const full = card.querySelector('.full');
+      if (full.style.display === 'none' || !full.style.display) {
+        full.style.display = 'block';
+        btn.textContent = 'Скрыть';
+      } else {
+        full.style.display = 'none';
+        btn.textContent = 'Подробнее';
+      }
+    });
   });
 
-  updateProgress();
+  document.querySelectorAll('.select-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      scores[type] += 1;
+      nextButton.style.display = 'block';
+    });
+  });
 }
 
-function selectAnswer(button) {
-  Array.from(button.parentNode.querySelectorAll('.answer-btn')).forEach(btn => btn.classList.remove('selected'));
-  button.classList.add('selected');
-
-  const type = button.dataset.type;
-  if (type) {
-    scores[type] += 1;
-  }
-
-  nextButton.style.display = 'block';
+function resetState() {
+  questionElement.innerHTML = '';
+  nextButton.style.display = 'none';
 }
 
 function nextQuestion() {
@@ -416,15 +441,30 @@ async function finishQuiz() {
 
   const timeSpent = Math.floor((Date.now() - startTime) / 1000);
   const personalityType = determinePersonality(scores);
-  resultName.textContent = userName;
+  const personalityInfo = getDescription(personalityType);
+
   resultPersonality.textContent = personalityType;
+  resultDescription.innerHTML = `
+    <p>${personalityInfo.description}</p>
+    <button id="read-more-btn">Подробнее о типе</button>
+    <div id="full-description" style="display:none;">${personalityInfo.fullDescription}</div>
+  `;
+
   timeSpentElement.textContent = timeSpent;
 
-  resultScoresList.innerHTML = Object.entries(scores).map(([key, value]) =>
-    `<li>Группа ${key}: ${value} баллов</li>`
-  ).join('');
+  // Обработчик кнопки "Подробнее"
+  document.getElementById('read-more-btn')?.addEventListener('click', () => {
+    const fullDesc = document.getElementById('full-description');
+    if (fullDesc.style.display === 'none' || !fullDesc.style.display) {
+      fullDesc.style.display = 'block';
+      document.getElementById('read-more-btn').textContent = 'Скрыть';
+    } else {
+      fullDesc.style.display = 'none';
+      document.getElementById('read-more-btn').textContent = 'Подробнее';
+    }
+  });
 
-  // Отправка результата
+  // Отправка результата на сервер
   await saveResults(userName, personalityType, timeSpent, userGroup, scores);
 }
 
@@ -432,24 +472,35 @@ function determinePersonality(scores) {
   return Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
 }
 
-function resetState() {
-  while (questionElement.children.length > 1) {
-    questionElement.removeChild(questionElement.lastChild);
-  }
-  nextButton.style.display = 'none';
-}
+function getDescription(type) {
+  const descriptions = {
+    I: {
+      description: "Вы ориентированы на работу с вещами, техникой и конкретными объектами.",
+      fullDescription: "Реалистический тип предпочитает работать с вещами, а не с людьми. Это несоциальный, эмоционально-стабильный тип. Люди этого типа хорошо приспосабливаются к обстановке, трудолюбивы, настойчивы и уверены в себе. Они предпочитают четкие указания и традиционные ценности. Работа требует силы, ловкости, подвижности и координации движений."
+    },
+    II: {
+      description: "Вы любите исследовать идеи и решать сложные задачи.",
+      fullDescription: "Исследовательский тип ориентирован на работу с идеями и вещами. Характеризуется любознательностью, методичностью и аналитическим мышлением. Предпочитает научную или исследовательскую деятельность, где важна свобода и оригинальность мышления."
+    },
+    III: {
+      description: "Вы чувствительны к людям и предпочитаете общение и помощь другим.",
+      fullDescription: "Социальный тип ориентирован на общение и взаимодействие с другими людьми. Люди этого типа гуманны, эмпатичны, активны и готовы прийти на помощь. Предпочитают обучение, лечение, обслуживание и другие социальные профессии."
+    },
+    IV: {
+      description: "Вы предпочитаете структурированную, упорядоченную работу.",
+      fullDescription: "Конвенциональный тип выбирает четко структурированную деятельность, связанную с обработкой информации. Люди этого типа аккуратны, пунктуальны, дисциплинированы и добросовестны. Предпочитают работу с цифрами, текстами, формулами."
+    },
+    V: {
+      description: "Вы энергичны, предприимчивы и любите влиять на других.",
+      fullDescription: "Предприимчивый тип выбирает цели, которые позволяют проявить энергию и энтузиазм. Люди этого типа находчивы, практичны, быстро ориентируются в сложной обстановке и склонны к самостоятельному принятию решений."
+    },
+    VI: {
+      description: "Вы креативны, чувствительны и любите творчество.",
+      fullDescription: "Артистический тип характеризуется богатым воображением, чувствительностью и оригинальностью. Люди этого типа независимы, эмоциональны и предпочитают творческую деятельность в литературе, искусстве, театре и дизайне."
+    }
+  };
 
-function updateProgress() {
-  const percent = ((currentQuestionIndex + 1) / questions.length) * 100;
-  document.getElementById('progress').style.width = percent + "%";
-}
-
-function restartQuiz() {
-  currentQuestionIndex = 0;
-  resultContainer.style.display = 'none';
-  nameForm.style.display = 'block';
-  userNameInput.value = userName;
-  userGroupeInput.value = userGroup;
+  return descriptions[type];
 }
 
 async function saveResults(name, personality, time, group, scores) {
@@ -469,8 +520,10 @@ async function saveResults(name, personality, time, group, scores) {
         scores
       })
     });
+
     const result = await response.json();
     console.log("Результат:", result);
+
   } catch (error) {
     console.error("Ошибка:", error);
   }
