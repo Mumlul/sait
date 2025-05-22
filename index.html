@@ -9,23 +9,17 @@
 <body>
     <div class="container">
         <h1>Тест на тип личности</h1>
-        
-        <!-- Форма для имени -->
         <div id="name-form" class="card">
             <h2>Введите ваше имя:</h2>
             <input type="text" id="user-name" placeholder="Ваше имя">
             <input type="text" id="user-groupe" placeholder="Ваша группа">
             <button id="start-btn" class="btn">Начать тест</button>
         </div>
-
-        <!-- Контейнер теста -->
         <div id="quiz-container" class="card" style="display: none;">
             <div id="question-container"></div>
             <div id="answer-buttons" class="btn-grid"></div>
             <button id="next-btn" class="btn">Далее</button>
         </div>
-
-        <!-- Результат -->
         <div id="result-container" class="card" style="display: none;">
             <h2>Результат</h2>
             <p>Ваше имя: <span id="result-name"></span></p>
