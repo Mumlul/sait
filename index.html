@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -30,5 +30,96 @@
     </div>
 
     <script src="script.js"></script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Профессиональный тип личности</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question-box {
+      margin-top: 20px;
+    }
+    .answer-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 16px;
+    }
+    .answer-btn.selected {
+      background: #a5d8ff;
+    }
+    #progress-bar {
+      height: 20px;
+      background: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      transition: width 0.3s ease-in-out;
+    }
+    .result {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Тест профессионального типа личности</h1>
+
+    <div id="name-form">
+      <label>Введите имя:</label><br>
+      <input type="text" id="user-name"><br>
+      <label>Введите группу:</label><br>
+      <input type="text" id="user-groupe"><br>
+      <button id="start-btn">Начать тест</button>
+    </div>
+
+    <div id="quiz-container" style="display:none;">
+      <div id="progress-bar"><div id="progress"></div></div>
+      <div id="question-container"></div>
+      <button id="next-btn" style="display:none;">Следующий вопрос</button>
+    </div>
+
+    <div id="result-container" style="display:none;" class="result">
+      <h2>Результат</h2>
+      <p>Имя: <span id="result-name"></span></p>
+      <p>Ваш тип личности: <span id="result-personality"></span></p>
+      <p>Баллы по группам:</p>
+      <ul id="result-scores"></ul>
+      <p>Затраченное время: <span id="time-spent"></span> сек.</p>
+      <button id="restart-btn">Пройти снова</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
